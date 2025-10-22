@@ -18,7 +18,6 @@ public class Main {
         menuItemList.add(new MenuItem("갈비햄버거", 12000, "이것이 버거인가 갈비인가 수원짱치즈버거"));
         menuItemList.add(new MenuItem("새우햄버거", 13000, "이것이 버거인가 새우인가 수원짱치즈버거"));
 
-        //TODO
         //1. 메뉴 입력받기
         while (true) {
             //1. 메뉴 설정
@@ -58,15 +57,18 @@ public class Main {
         System.out.println("프로그램을 종료합니다.");
 
     }
+
+    /**
+     * 입력 받아 숫자로 parse 해주는 메서드
+     * @return 문자열에서 숫자로 파싱된 값
+     */
     public static int getIntInput() {
         String num;
         while (true) {
             try {
                 num = sc.nextLine();
                 return Integer.parseInt(num);
-            } catch (InputMismatchException ignored) {
-                System.out.println("다시 입력해 주세요.");
-            } catch (NumberFormatException ignored) {
+            } catch (InputMismatchException | NumberFormatException ignored) {
                 System.out.println("다시 입력해 주세요.");
                 sc.nextLine();
             }
