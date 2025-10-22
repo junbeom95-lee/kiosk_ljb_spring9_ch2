@@ -7,11 +7,12 @@ import java.util.Scanner;
 
 public class Main {
     //객체 생성
-    static Scanner sc = new Scanner(System.in);
-    static List<MenuItem> menuItemList = new ArrayList<>();
+    static Scanner sc = new Scanner(System.in);             //Scanner 선언
+    static List<MenuItem> menuItemList = new ArrayList<>(); //List 선언 및 초기화
 
     public static void main(String[] args) {
 
+        //add 함수를 통해 new MenuItem(이름, 가격, 설명) List에 삽입
         //메뉴아이템 생성 및 리스트에 추가
         menuItemList.add(new MenuItem("치즈햄버거", 10000, "이것이 버거인가 치즈인가 수원짱치즈버거"));
         menuItemList.add(new MenuItem("치킨햄버거", 11000, "이것이 버거인가 치킨인가 수원짱치킨버거"));
@@ -42,11 +43,11 @@ public class Main {
         do {
             //메뉴 출력
             System.out.println("[ SHAKESHACK MENU ]");
-            for(int i = 0 ; i < menuItemList.size(); i++) {
+            for(int i = 0 ; i < menuItemList.size(); i++) { //반복문을 활용해 List 안에 있는 MenuItem을 하나씩 출력
                 MenuItem mI = menuItemList.get(i);
-                System.out.printf("%d. %-13s | W %1.1f | %s\n", i + 1, mI.getName(), (float)mI.getPrice() * 0.001, mI.getInfo());
+                System.out.printf("%d. %-13s | W %5.1f | %s\n", i + 1, mI.getName(), (float)mI.getPrice() * 0.001, mI.getInfo());
             }
-            System.out.printf("0. %-13s   | 종료\n", "종료");
+            System.out.printf("0. %-13s  | 종료\n", "종료");
 
             //메뉴 선택 - 숫자를 입력 받기
             selectNum = getIntInput();
@@ -60,6 +61,7 @@ public class Main {
             }
         } while (0 != selectNum);
 
+        //프로그램 종료
         sc.close(); //Scanner 종료
         System.out.println("프로그램을 종료합니다.");
 
