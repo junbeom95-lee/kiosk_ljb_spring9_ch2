@@ -1,15 +1,10 @@
+import kiosk.Kiosk;
 import kiosk.MenuItem;
 
 import java.util.ArrayList;
-import java.util.InputMismatchException;
 import java.util.List;
-import java.util.Scanner;
 
 public class Main {
-    //객체 생성
-    static Scanner sc = new Scanner(System.in);             //Scanner 선언
-    static List<MenuItem> menuItemList = new ArrayList<>(); //List 선언 및 초기화
-
     public static void main(String[] args) {
 
         //add 함수를 통해 new MenuItem(이름, 가격, 설명) List에 삽입
@@ -38,49 +33,6 @@ public class Main {
 //            if (0 == n) break;
 //        }
 
-        //2. 메뉴 출력하기
-        int selectNum;
-        do {
-            //메뉴 출력
-            System.out.println("[ SHAKESHACK MENU ]");
-            for(int i = 0 ; i < menuItemList.size(); i++) { //반복문을 활용해 List 안에 있는 MenuItem을 하나씩 출력
-                MenuItem mI = menuItemList.get(i);
-                System.out.printf("%d. %-13s | W %5.1f | %s\n", i + 1, mI.getName(), (float)mI.getPrice() * 0.001, mI.getInfo());
-            }
-            System.out.printf("0. %-13s  | 종료\n", "종료");
 
-            //메뉴 선택 - 숫자를 입력 받기
-            selectNum = getIntInput();
-
-            if(menuItemList.size() < selectNum) {
-                System.out.println("다시 입력해 주세요.");
-            } else if (0 != selectNum) {
-                //입력된 숫자에 따른 처리
-                MenuItem pickItem = menuItemList.get(selectNum - 1);
-                System.out.println("선택한 메뉴 -> 이름: " + pickItem.getName() + " 가격: " + (float) pickItem.getPrice() * 0.001 + " 설명: " + pickItem.getInfo());
-            }
-        } while (0 != selectNum);
-
-        //프로그램 종료
-        sc.close(); //Scanner 종료
-        System.out.println("프로그램을 종료합니다.");
-
-    }
-
-    /**
-     * 입력 받아 숫자로 parse 해주는 메서드
-     * @return 문자열에서 숫자로 파싱된 값
-     */
-    public static int getIntInput() {
-        String num;
-        while (true) {
-            try {
-                num = sc.nextLine();
-                return Integer.parseInt(num);
-            } catch (InputMismatchException | NumberFormatException ignored) {
-                System.out.println("다시 입력해 주세요.");
-                sc.nextLine();
-            }
-        }
     }
 }
