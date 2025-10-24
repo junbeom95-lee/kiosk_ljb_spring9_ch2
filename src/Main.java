@@ -22,26 +22,5 @@ public class Main {
 
         //키오스크 시작
         kiosk.start();
-
-        //1. 메뉴 입력받기
-//        while (true) {
-//            //1. 메뉴 설정
-//            System.out.print("메뉴의 이름을 입력해주세요: ");
-//            String name = sc.nextLine();
-//            System.out.print("메뉴의 가격을 입력해주세요: ");
-//            int price = getIntInput();
-//            System.out.print("메뉴의 설명을 입력해주세요: ");
-//            String info = sc.nextLine();
-//            //2. 입력 받은 값을 객체에 담아 리스트에 저장
-//            MenuItem menuItem = new MenuItem(name, price, info);
-//            menuItemList.add(menuItem);
-//
-//            //3. 더 저장할 지 물어봄
-//            System.out.print("입력을 종료하시겠습니까? ");
-//            int n = getIntInput();
-//            if (0 == n) break;
-//        }
-
-
     }
 }
