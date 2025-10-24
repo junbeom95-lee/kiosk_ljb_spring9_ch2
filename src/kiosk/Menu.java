@@ -15,6 +15,15 @@ public class Menu { //MenuItem 클래스를 관리하는 클래스
     }
 
     //기능
+    //List에 들어있는 MenuItem을 순차적으로 보여주는 함수
+    public void printMenuItem(List<MenuItem> itemList) {
+        for(int i = 0; i < itemList.size(); i++) {
+            MenuItem mI = itemList.get(i);
+            System.out.printf("%d. %-13s | W %5.1f | %s\n", i + 1, mI.getName(), (float)mI.getPrice() * 0.001, mI.getInfo());
+        }
+        System.out.printf("0. %-13s  | 종료\n", "종료");
+
+    }
     /**
      * MenuItemList 리턴하는 함수
      */
