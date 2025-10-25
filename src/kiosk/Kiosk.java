@@ -6,9 +6,8 @@ import java.util.Scanner;
 
 public class Kiosk {    //프로그램 순서 및 흐름 제어를 담당하는 클래스
     //속성
-    //MenuItem을 관리하는 리스트가 필드로 존재
-    private final Scanner sc = new Scanner(System.in);             //Scanner 선언
-    private final List<Menu> category;
+    private final Scanner sc = new Scanner(System.in);  //Scanner 선언
+    private final List<Menu> category;                  //여러 메뉴를 담은 리스트
 
     //생성자
     public Kiosk(List<Menu> category) {
@@ -24,15 +23,16 @@ public class Kiosk {    //프로그램 순서 및 흐름 제어를 담당하는 
     public void start() {
 
         String currentMenu = "MAIN";    //현재 ~~ 메뉴 ENUM
-        int selectNumber = 0;             //유저가 고른 숫자
-        Menu menu;
-        List<MenuItem> itemList;
+        int menuNumber = 0;             //카테고리 선택 숫자
+        int selectNumber;               //메뉴 선택 숫자
+        Menu menu;                      //메뉴
+        List<MenuItem> itemList;        //메뉴 아이템 리스트
+
         //반복문 시작
         do {
             //메뉴 출력
             switch (currentMenu) {
                 case "MAIN":    //메인 메뉴
-
                     //List와 Menu 클래스 활용하여 상위 카테고리 메뉴 출력
                     System.out.println("[ MAIN MENU ]");
                     for(int i = 0; i < category.size(); i++) {
@@ -41,13 +41,13 @@ public class Kiosk {    //프로그램 순서 및 흐름 제어를 담당하는 
                     System.out.println("0. 종료   | 종료");
 
                     //숫자 입력 받기 - 메뉴 선택
-                    selectNumber = getIntInput();
+                    menuNumber = getIntInput();
 
                     //해당 메뉴로 전환
-                    if(selectNumber == 1) currentMenu = "BURGER";
-                    else if (selectNumber == 2) currentMenu = "DRINK";
-                    else if (selectNumber == 3) currentMenu = "SIDE";
-                    else if (selectNumber == 0) System.out.println("종료하겠습니다.");
+                    if(menuNumber == 1) currentMenu = "BURGER";
+                    else if (menuNumber == 2) currentMenu = "DRINK";
+                    else if (menuNumber == 3) currentMenu = "SIDE";
+                    else if (menuNumber == 0) System.out.println("종료하겠습니다.");
                     else System.out.println("잘못된 숫자입니다.");
                     break;
 
@@ -56,7 +56,7 @@ public class Kiosk {    //프로그램 순서 및 흐름 제어를 담당하는 
                     System.out.println("[ BURGER MENU ]");
                     //입력받은 숫자가 올바르다면 인덱스로 활용하여 List에 접근하기
                     //List<Menu>에 인덱스로 접근하면 Menu만 추출 가능
-                    menu =  category.get(selectNumber -1);
+                    menu =  category.get(menuNumber -1);
 
                     //Menu가 가진 List<MenuItem>을 반복문을 활용하여 BURGER 메뉴 출력
                     itemList = menu.getMenuItemList();
@@ -69,7 +69,6 @@ public class Kiosk {    //프로그램 순서 및 흐름 제어를 담당하는 
                         System.out.println("번호를 잘 보시고 입력해주세요.");
                     } else if (0 == selectNumber) {
                         currentMenu = "MAIN";
-                        selectNumber = -1;
                     } else {
                         MenuItem pickItem = itemList.get(selectNumber - 1);
                         System.out.println("선택한 메뉴 -> 이름: " + pickItem.getName() + " 가격: " + (float) pickItem.getPrice() * 0.001 + " 설명: " + pickItem.getInfo());
@@ -80,7 +79,7 @@ public class Kiosk {    //프로그램 순서 및 흐름 제어를 담당하는 
 
                     System.out.println("[ DRINK MENU ]");
                     //입력받은 숫자가 올바르다면 인덱스로 활용하여 List에 접근하기
-                    menu =  category.get(selectNumber -1);
+                    menu =  category.get(menuNumber - 1);
 
                     //Menu가 가진 List<MenuItem>을 반복문을 활용하여 DRINK 메뉴 출력
                     itemList = menu.getMenuItemList();
@@ -131,7 +130,7 @@ public class Kiosk {    //프로그램 순서 및 흐름 제어를 담당하는 
                     currentMenu = "MAIN";
                     break;
             }
-        } while (0 != selectNumber || !"MAIN".equals(currentMenu));
+        } while ((0 != menuNumber) || !("MAIN".equals(currentMenu)));
 
         //프로그램 종료
         sc.close(); //Scanner 종료
