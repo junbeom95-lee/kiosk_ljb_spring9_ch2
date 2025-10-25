@@ -89,16 +89,8 @@ public class Kiosk {    //프로그램 순서 및 흐름 제어를 담당하는 
                     //숫자 입력 받기 - 메뉴 선택
                     selectNumber = getIntInput();
 
-                    if(itemList.size() < selectNumber || selectNumber < 0) {
-                        System.out.println("번호를 잘 보시고 입력해주세요.");
-                    } else if (0 == selectNumber) {
-                        currentMenu = "MAIN";
-                        selectNumber = -1;
-                    } else {
-                        MenuItem pickItem = itemList.get(selectNumber - 1);
-                        System.out.println("선택한 메뉴 -> 이름: " + pickItem.getName() + " 가격: " + (float) pickItem.getPrice() * 0.001 + " 설명: " + pickItem.getInfo());
-                        currentMenu = "MAIN";
-                    }
+                    //선택한 메뉴 아이템을 출력하고 메인 메뉴로 돌아가게끔 MAIN문자열을 넘겨주는 메서드
+                    currentMenu = printSelectMenuItem(menu, currentMenu, selectNumber);
                     break;
                 case "SIDE":
 
@@ -113,16 +105,7 @@ public class Kiosk {    //프로그램 순서 및 흐름 제어를 담당하는 
                     //숫자 입력 받기 - 메뉴 선택
                     selectNumber = getIntInput();
 
-                    if(itemList.size() < selectNumber || selectNumber < 0) {
-                        System.out.println("번호를 잘 보시고 입력해주세요.");
-                    } else if (0 == selectNumber) {
-                        currentMenu = "MAIN";
-                        selectNumber = -1;
-                    } else {
-                        MenuItem pickItem = itemList.get(selectNumber - 1);
-                        System.out.println("선택한 메뉴 -> 이름: " + pickItem.getName() + " 가격: " + (float) pickItem.getPrice() * 0.001 + " 설명: " + pickItem.getInfo());
-                        currentMenu = "MAIN";
-                    }
+                    currentMenu = printSelectMenuItem(menu, currentMenu, selectNumber);
                     break;
                 default:
                     System.out.println("접근 불가능한 menu입니다.");
@@ -152,5 +135,28 @@ public class Kiosk {    //프로그램 순서 및 흐름 제어를 담당하는 
                 sc.nextLine();
             }
         }
+    }
+
+    /**
+     * 선택한 메뉴 아이템을 출력하고 메인 메뉴로 돌아가게끔 MAIN문자열을 넘겨주는 메서드
+     * @param menu 선택한 메뉴아이템을 보여주기 위한 메뉴
+     * @param currentMenu 현재 메뉴
+     * @param selectNumber 유저가 고른 메뉴 아이템 넘버
+     * @return 메뉴를 고른 후의 현재 메뉴 상태를 나타내는 문자열
+     */
+    public String printSelectMenuItem(Menu menu, String currentMenu, int selectNumber) {
+        //메뉴 아이템을 담은 리스트
+        List<MenuItem> itemList = menu.getMenuItemList();
+
+        //메뉴 아이템을 고르기
+        if(itemList.size() < selectNumber || selectNumber < 0) {    //범위를 벗어났을 때
+            System.out.println("번호를 잘 보시고 입력해주세요.");
+        } else if (0 == selectNumber) {                             //종료할 때
+            currentMenu = "MAIN";   //메인 메뉴로 돌아가기
+        } else {                                                    //메뉴 아이템을 골랐을 때
+            menu.printPickMenuItem(itemList, selectNumber);
+            currentMenu = "MAIN";
+        }
+        return currentMenu;
     }
 }
