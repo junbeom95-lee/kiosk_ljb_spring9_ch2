@@ -24,7 +24,7 @@ public class Kiosk {    //프로그램 순서 및 흐름 제어를 담당하는 
 
         String currentMenu = "MAIN";    //현재 ~~ 메뉴 ENUM
         int menuNumber = 0;             //카테고리 선택 숫자
-        int selectNumber;               //메뉴 선택 숫자
+        int selectNumber;               //메뉴 선택 숫자 유저가 고른 메뉴 아이템 넘버
         Menu menu;                      //메뉴
         List<MenuItem> itemList;        //메뉴 아이템 리스트
 
@@ -60,7 +60,7 @@ public class Kiosk {    //프로그램 순서 및 흐름 제어를 담당하는 
 
                     //Menu가 가진 List<MenuItem>을 반복문을 활용하여 BURGER 메뉴 출력
                     itemList = menu.getMenuItemList();
-                    menu.printMenuItem(itemList);
+                    menu.printMenuItem();
 
                     //숫자 입력 받기 - 메뉴 선택
                     selectNumber = getIntInput();
@@ -82,9 +82,7 @@ public class Kiosk {    //프로그램 순서 및 흐름 제어를 담당하는 
                     menu =  category.get(menuNumber - 1);
 
                     //Menu가 가진 List<MenuItem>을 반복문을 활용하여 DRINK 메뉴 출력
-                    itemList = menu.getMenuItemList();
-                    menu.printMenuItem(itemList);
-
+                    menu.printMenuItem();
 
                     //숫자 입력 받기 - 메뉴 선택
                     selectNumber = getIntInput();
@@ -99,8 +97,7 @@ public class Kiosk {    //프로그램 순서 및 흐름 제어를 담당하는 
                     menu =  category.get(menuNumber -1);
 
                     //Menu가 가진 List<MenuItem>을 반복문을 활용하여 SIDE 메뉴 출력
-                    itemList = menu.getMenuItemList();
-                    menu.printMenuItem(itemList);
+                    menu.printMenuItem();
 
                     //숫자 입력 받기 - 메뉴 선택
                     selectNumber = getIntInput();
@@ -154,7 +151,7 @@ public class Kiosk {    //프로그램 순서 및 흐름 제어를 담당하는 
         } else if (0 == selectNumber) {                             //종료할 때
             currentMenu = "MAIN";   //메인 메뉴로 돌아가기
         } else {                                                    //메뉴 아이템을 골랐을 때
-            menu.printPickMenuItem(itemList, selectNumber);
+            menu.printPickMenuItem(selectNumber);
             currentMenu = "MAIN";
         }
         return currentMenu;
