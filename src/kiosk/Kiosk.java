@@ -104,7 +104,7 @@ public class Kiosk {    //프로그램 순서 및 흐름 제어를 담당하는 
 
                     System.out.println("[ SIDE MENU ]");
                     //입력받은 숫자가 올바르다면 인덱스로 활용하여 List에 접근하기
-                    menu =  category.get(selectNumber -1);
+                    menu =  category.get(menuNumber -1);
 
                     //Menu가 가진 List<MenuItem>을 반복문을 활용하여 SIDE 메뉴 출력
                     itemList = menu.getMenuItemList();
@@ -130,7 +130,7 @@ public class Kiosk {    //프로그램 순서 및 흐름 제어를 담당하는 
                     currentMenu = "MAIN";
                     break;
             }
-        } while ((0 != menuNumber) || !("MAIN".equals(currentMenu)));
+        } while (0 != menuNumber);
 
         //프로그램 종료
         sc.close(); //Scanner 종료
