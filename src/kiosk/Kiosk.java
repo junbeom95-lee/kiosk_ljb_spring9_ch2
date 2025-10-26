@@ -38,6 +38,12 @@ public class Kiosk {    //프로그램 순서 및 흐름 제어를 담당하는 
                     for(int i = 0; i < category.size(); i++) {
                         System.out.printf("%d. %-13s\n", i + 1,  category.get(i).getName());
                     }
+
+                    //TODO
+                    //장바구니에 물건이 들어 있으면 아래와 같이 [ ORDER MENU ] 가 추가로 출력됩니다.
+                    //만약에 장바구니에 물건이 들어 있지 않다면 [ ORDER MENU ] 가 출력되지 않습니다.
+                    //미출력일 때 4,5 번을 누르면 예외를 던저줘야 합니다
+
                     System.out.println("0. 종료   | 종료");
 
                     //숫자 입력 받기 - 메뉴 선택
@@ -59,21 +65,13 @@ public class Kiosk {    //프로그램 순서 및 흐름 제어를 담당하는 
                     menu =  category.get(menuNumber -1);
 
                     //Menu가 가진 List<MenuItem>을 반복문을 활용하여 BURGER 메뉴 출력
-                    itemList = menu.getMenuItemList();
                     menu.printMenuItem();
 
                     //숫자 입력 받기 - 메뉴 선택
                     selectNumber = getIntInput();
 
-                    if(itemList.size() < selectNumber || selectNumber < 0) {
-                        System.out.println("번호를 잘 보시고 입력해주세요.");
-                    } else if (0 == selectNumber) {
-                        currentMenu = "MAIN";
-                    } else {
-                        MenuItem pickItem = itemList.get(selectNumber - 1);
-                        System.out.println("선택한 메뉴 -> 이름: " + pickItem.getName() + " 가격: " + (float) pickItem.getPrice() * 0.001 + " 설명: " + pickItem.getInfo());
-                        currentMenu = "MAIN";
-                    }
+                    //선택한 메뉴 아이템을 출력하고 메인 메뉴로 돌아가게끔 MAIN문자열을 넘겨주는 메서드
+                    currentMenu = printSelectMenuItem(menu, currentMenu, selectNumber);
                     break;
                 case "DRINK":
 
@@ -104,11 +102,29 @@ public class Kiosk {    //프로그램 순서 및 흐름 제어를 담당하는 
 
                     currentMenu = printSelectMenuItem(menu, currentMenu, selectNumber);
                     break;
+
                 default:
                     System.out.println("접근 불가능한 menu입니다.");
                     System.out.println(" main 메뉴로 돌아갑니다. ");
                     currentMenu = "MAIN";
                     break;
+
+                //TODO
+                //장바구니를 확인 후 주문하는 카테고리 추가
+                //아래와 같이 주문하시겠습니까?   <- print
+                //[ Orders ] <- print
+
+                // 메뉴아이템 출력 메뉴 이름 | 가격 | 설명 <- print
+
+                //[ Total ] < <- print
+                //total 가격 프린트
+
+                //1. 주문  2. 메뉴판
+
+                //1번 입력 시 주문이 완료되었습니다. 금액은 total 금액 출력
+
+                //주문 후 장바구니 비우기 기능 추가
+
             }
         } while (0 != menuNumber);
 
@@ -151,8 +167,9 @@ public class Kiosk {    //프로그램 순서 및 흐름 제어를 담당하는 
         } else if (0 == selectNumber) {                             //종료할 때
             currentMenu = "MAIN";   //메인 메뉴로 돌아가기
         } else {                                                    //메뉴 아이템을 골랐을 때
+            //선택한 메뉴 출력
             menu.printPickMenuItem(selectNumber);
-            currentMenu = "MAIN";
+            currentMenu = "MAIN";   //메인 메뉴로 돌아가기
         }
         return currentMenu;
     }
