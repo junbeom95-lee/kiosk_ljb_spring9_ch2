@@ -6,12 +6,15 @@ import java.util.Scanner;
 
 public class Kiosk {    //프로그램 순서 및 흐름 제어를 담당하는 클래스
     //속성
-    private final Scanner sc = new Scanner(System.in);  //Scanner 선언
-    private final List<Menu> category;                  //여러 메뉴를 담은 리스트
+    private final Scanner sc;           //Scanner 선언
+    private final List<Menu> category;  //여러 메뉴를 담은 리스트
+    private final Cart cart;            //장바구니 클래스
 
     //생성자
     public Kiosk(List<Menu> category) {
+        this.sc = new Scanner(System.in);
         this.category = category;
+        this.cart = new Cart();
     }
 
     //기능
@@ -25,106 +28,175 @@ public class Kiosk {    //프로그램 순서 및 흐름 제어를 담당하는 
         String currentMenu = "MAIN";    //현재 ~~ 메뉴 ENUM
         int menuNumber = 0;             //카테고리 선택 숫자
         int selectNumber;               //메뉴 선택 숫자 유저가 고른 메뉴 아이템 넘버
-        Menu menu;                      //메뉴
-        List<MenuItem> itemList;        //메뉴 아이템 리스트
+        Menu menu = null;               //메뉴
 
         //반복문 시작
         do {
-            //메뉴 출력
-            switch (currentMenu) {
-                case "MAIN":    //메인 메뉴
-                    //List와 Menu 클래스 활용하여 상위 카테고리 메뉴 출력
-                    System.out.println("[ MAIN MENU ]");
-                    for(int i = 0; i < category.size(); i++) {
-                        System.out.printf("%d. %-13s\n", i + 1,  category.get(i).getName());
-                    }
+            try {
+                //메뉴 출력
+                switch (currentMenu) {
+                    case "MAIN":    //메인 메뉴
 
-                    //TODO
-                    //장바구니에 물건이 들어 있으면 아래와 같이 [ ORDER MENU ] 가 추가로 출력됩니다.
-                    //만약에 장바구니에 물건이 들어 있지 않다면 [ ORDER MENU ] 가 출력되지 않습니다.
-                    //미출력일 때 4,5 번을 누르면 예외를 던저줘야 합니다
+                        //1. List와 Menu 클래스 활용하여 상위 카테고리 메뉴 출력
+                        System.out.println("[ MAIN MENU ]");
+                        for (int i = 0; i < category.size(); i++) {
+                            System.out.printf("%d. %-13s\n", i + 1, category.get(i).getName());
+                        }
+                        System.out.println("0. 종료   | 종료");
 
-                    System.out.println("0. 종료   | 종료");
+                        //1-a. ORDERS, CANCEL 출력
+                        //장바구니에 물건이 들어 있으면 아래와 같이 [ ORDER MENU ] 가 추가로 출력됩니다.
+                        //만약에 장바구니에 물건이 들어 있지 않다면 [ ORDER MENU ] 가 출력되지 않습니다.
+                        if (!cart.checkCart()) {
+                            int categorySize = category.size();
+                            System.out.println();
+                            System.out.println("[ ORDER MENU ] ");
+                            System.out.printf("%d. %-13s | %s\n", (categorySize + 1), "ORDERS", "장바구니를 확인 후 주문합니다.");
+                            System.out.printf("%d. %-13s | %s\n", (categorySize + 2), "CANCEL", "진행중인 주문을 취소합니다.");
+                        }
 
-                    //숫자 입력 받기 - 메뉴 선택
-                    menuNumber = getIntInput();
+                        //2. 숫자 입력 받기 - 메뉴 선택
+                        menuNumber = getIntInput();
 
-                    //해당 메뉴로 전환
-                    if(menuNumber == 1) currentMenu = "BURGER";
-                    else if (menuNumber == 2) currentMenu = "DRINK";
-                    else if (menuNumber == 3) currentMenu = "SIDE";
-                    else if (menuNumber == 0) System.out.println("종료하겠습니다.");
-                    else System.out.println("잘못된 숫자입니다.");
-                    break;
+                        //3. 해당 메뉴 전환
+                        //3-a. 미출력일 때 4,5 번을 누르면 예외를 던저줘야 합니다.
+                        if (cart.checkCart()) {
+                            if (category.size() < menuNumber && category.size() + 2 < menuNumber) {
+                                throw new IndexOutOfBoundsException("장바구니에 담겨있지 않습니다.");
+                            }
+                        } else {
+                            //장바구니 확인 메뉴로 전환
+                            if (menuNumber == category.size() + 1) {
+                                currentMenu = "ORDER";
+                                break;
+                            }
+                            //진행중인 주문 취소
+                            if (menuNumber == category.size() + 2) {
+                                currentMenu = "CANCEL";
+                                break;
+                            }
+                        }
 
-                case "BURGER":  //버거 메뉴
+                        //3-b. 종료할 때 (0을 입력시)
+                        if (0 == menuNumber) {
+                            System.out.println("종료하겠습니다.");
+                        } else if (category.size() >= menuNumber) { //3-c. 카테고리 선택 시
+                            //해당 메뉴로 전환
+                            menu = category.get(menuNumber - 1);
+                            currentMenu = menu.getName();
+                        } else {
+                            throw new IndexOutOfBoundsException("잘못된 숫자를 선택하셨습니다.");
+                        }
 
-                    System.out.println("[ BURGER MENU ]");
-                    //입력받은 숫자가 올바르다면 인덱스로 활용하여 List에 접근하기
-                    //List<Menu>에 인덱스로 접근하면 Menu만 추출 가능
-                    menu =  category.get(menuNumber -1);
+                        break;
+                    case "ORDER":   //장바구니를 확인 후 주문할 때
 
-                    //Menu가 가진 List<MenuItem>을 반복문을 활용하여 BURGER 메뉴 출력
-                    menu.printMenuItem();
+                        System.out.println("아래와 같이 주문하시겠습니까?");
+                        System.out.println(" [ ORDERS ]");
+                        //1. 장바구니에 담은 메뉴들을 출력하기
+                        cart.printMenuItemList();
 
-                    //숫자 입력 받기 - 메뉴 선택
-                    selectNumber = getIntInput();
+                        //2. 총 가격(total) 구하기
+                        int total = cart.getTotal();
 
-                    //선택한 메뉴 아이템을 출력하고 메인 메뉴로 돌아가게끔 MAIN문자열을 넘겨주는 메서드
-                    currentMenu = printSelectMenuItem(menu, currentMenu, selectNumber);
-                    break;
-                case "DRINK":
+                        //3. 총 가격(total) 가격 출력
+                        System.out.println();
+                        System.out.println(" [ Total ]");
+                        System.out.println("W " + total);
+                        System.out.println("1. 주문           2. 메뉴판");
 
-                    System.out.println("[ DRINK MENU ]");
-                    //입력받은 숫자가 올바르다면 인덱스로 활용하여 List에 접근하기
-                    menu =  category.get(menuNumber - 1);
+                        //4. 숫자 입력 받기 - 1. 주문 2. 메뉴판으로 돌아가기
+                        selectNumber = getIntInput();
 
-                    //Menu가 가진 List<MenuItem>을 반복문을 활용하여 DRINK 메뉴 출력
-                    menu.printMenuItem();
+                        //5-a. 1번 입력 시 주문이 완료되었습니다. 금액은 total 금액 출력 후 장바구니 비우기
+                        if (1 == selectNumber) {
+                            System.out.println("주문이 완료되었습니다. 금액은 W " + total + " 입니다.");
+                            cart.clearCart();       //주문 후 장바구니 비우기 기능 추가
+                            currentMenu = "MAIN";   //MAIN으로 돌아가기
+                        } else if (2 == selectNumber) { //5-b. 2번 입력시 메뉴판으로 돌아가기
+                            System.out.println("메뉴판으로 돌아갑니다.");
+                            currentMenu = "MAIN";   //MAIN으로 돌아가기
+                        } else throw new IndexOutOfBoundsException("잘못된 숫자를 선택하셨습니다.");
+                        break;
+                    case "CANCEL":  //진행중인 주문을 취소할 때
 
-                    //숫자 입력 받기 - 메뉴 선택
-                    selectNumber = getIntInput();
+                        //1. CANCEL 메뉴얼 출력
+                        System.out.println(" [ CANCEL MENU ] ");
+                        System.out.println(" 장바구니를 비우시겠습니까?");
+                        System.out.println("1. 삭제           2. 메뉴판");
 
-                    //선택한 메뉴 아이템을 출력하고 메인 메뉴로 돌아가게끔 MAIN문자열을 넘겨주는 메서드
-                    currentMenu = printSelectMenuItem(menu, currentMenu, selectNumber);
-                    break;
-                case "SIDE":
+                        //2. 숫자 입력 받기 - 1. 주문 2. 메뉴판으로 돌아가기
+                        selectNumber = getIntInput();
 
-                    System.out.println("[ SIDE MENU ]");
-                    //입력받은 숫자가 올바르다면 인덱스로 활용하여 List에 접근하기
-                    menu =  category.get(menuNumber -1);
 
-                    //Menu가 가진 List<MenuItem>을 반복문을 활용하여 SIDE 메뉴 출력
-                    menu.printMenuItem();
+                        //3-a. 1번 입력시 장바구니 비우기, 2번 입력시 메뉴판으로 돌아가기
+                        if (1 == selectNumber) {
+                            System.out.println("장바구니를 비웠습니다.");
+                            cart.clearCart();       //장바구니 비우기
+                            currentMenu = "MAIN";   //MAIN으로 돌아가기
+                        } else if (2 == selectNumber) {
+                            System.out.println("메뉴판으로 돌아갑니다.");
+                            currentMenu = "MAIN";   //MAIN으로 돌아가기
+                        } else throw new IndexOutOfBoundsException("잘못된 숫자를 선택하셨습니다.");
+                        break;
+                    default:    //메뉴를 골랐을 때
 
-                    //숫자 입력 받기 - 메뉴 선택
-                    selectNumber = getIntInput();
+                        //1. 현재 메뉴 출력
+                        System.out.println("[ " + menu.getName()  + " MENU ]");
 
-                    currentMenu = printSelectMenuItem(menu, currentMenu, selectNumber);
-                    break;
+                        //2. 입력받은 숫자가 올바르다면 인덱스로 활용하여 List에 접근하기
+                        menu = category.get(menuNumber - 1);
 
-                default:
-                    System.out.println("접근 불가능한 menu입니다.");
-                    System.out.println(" main 메뉴로 돌아갑니다. ");
-                    currentMenu = "MAIN";
-                    break;
+                        //3. Menu가 가진 List<MenuItem>을 반복문을 활용하여 MenuItem 출력
+                        menu.printMenuItemList();
 
-                //TODO
-                //장바구니를 확인 후 주문하는 카테고리 추가
-                //아래와 같이 주문하시겠습니까?   <- print
-                //[ Orders ] <- print
+                        //4. 숫자 입력 받기 - 메뉴 선택
+                        selectNumber = getIntInput();
 
-                // 메뉴아이템 출력 메뉴 이름 | 가격 | 설명 <- print
+                        //5. 선택한 메뉴아이템 리스트 불러오기
+                        List<MenuItem> menuItemList = menu.getMenuItemList();
+                        MenuItem pickItem = menuItemList.get(selectNumber - 1);
 
-                //[ Total ] < <- print
-                //total 가격 프린트
+                        //5-a. 범위 밖의 번호일 때 throw 예외
+                        if (menuItemList.size() < selectNumber || selectNumber < 0) {
+                            throw new IndexOutOfBoundsException("번호를 잘 보시고 입력해주세요.");
+                        }
 
-                //1. 주문  2. 메뉴판
+                        //5-b. 메뉴아이템을 고를 시 메뉴 출력
+                        if(0 != selectNumber) {
+                            System.out.println("선택한 메뉴 -> 이름: " + pickItem.getName() + " 가격: " + (float) pickItem.getPrice() * 0.001 + " 설명: " + pickItem.getInfo());
+                        } else {
+                            //5-c. 0을 누르면 메인으로 돌아가기
+                            currentMenu = "MAIN";
+                            break;
+                        }
 
-                //1번 입력 시 주문이 완료되었습니다. 금액은 total 금액 출력
+                        //6. 장바구니에 담겨있는지 확인하여 수량을 반환
+                        int addedEa = cart.checkMenuItemEa(pickItem);
 
-                //주문 후 장바구니 비우기 기능 추가
+                        //6-a. 장바구니에 담겨있으면 달라지는 내용
+                        if (0 == addedEa) {
+                            System.out.print("수량을 정해주세요: ");
+                        } else {
+                            System.out.print("현재 담겨있는 개수는: " + addedEa + " 입니다. 새로운 수량을 정해주세요: ");
+                        }
 
+                        //7. 장바구니에 메뉴아이템을 몇개 넣을지 수량 입력 받기
+                        int ea = getIntInput();
+
+                        //8. 장바구니에 담기
+                        cart.addMenuItem(pickItem, ea);
+
+                        //8. 메인으로 돌아가기
+                        currentMenu = "MAIN";
+                        break;
+
+                }
+            } catch (IndexOutOfBoundsException e) {
+                //예외 메시지 출력
+                System.out.println(e.getMessage());
+            } catch (NullPointerException e) {
+                System.out.println("존재하지 않은 메뉴입니다.");
             }
         } while (0 != menuNumber);
 
@@ -148,29 +220,5 @@ public class Kiosk {    //프로그램 순서 및 흐름 제어를 담당하는 
                 sc.nextLine();
             }
         }
-    }
-
-    /**
-     * 선택한 메뉴 아이템을 출력하고 메인 메뉴로 돌아가게끔 MAIN문자열을 넘겨주는 메서드
-     * @param menu 선택한 메뉴아이템을 보여주기 위한 메뉴
-     * @param currentMenu 현재 메뉴
-     * @param selectNumber 유저가 고른 메뉴 아이템 넘버
-     * @return 메뉴를 고른 후의 현재 메뉴 상태를 나타내는 문자열
-     */
-    public String printSelectMenuItem(Menu menu, String currentMenu, int selectNumber) {
-        //메뉴 아이템을 담은 리스트
-        List<MenuItem> itemList = menu.getMenuItemList();
-
-        //메뉴 아이템을 고르기
-        if(itemList.size() < selectNumber || selectNumber < 0) {    //범위를 벗어났을 때
-            System.out.println("번호를 잘 보시고 입력해주세요.");
-        } else if (0 == selectNumber) {                             //종료할 때
-            currentMenu = "MAIN";   //메인 메뉴로 돌아가기
-        } else {                                                    //메뉴 아이템을 골랐을 때
-            //선택한 메뉴 출력
-            menu.printPickMenuItem(selectNumber);
-            currentMenu = "MAIN";   //메인 메뉴로 돌아가기
-        }
-        return currentMenu;
     }
 }
