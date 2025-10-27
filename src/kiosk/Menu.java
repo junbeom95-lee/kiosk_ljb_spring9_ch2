@@ -17,22 +17,13 @@ public class Menu { //MenuItem 클래스를 관리하는 클래스
     /**
      * List에 들어있는 MenuItem을 순차적으로 보여주는 메서드
      */
-    public void printMenuItem() {
+    public void printMenuItemList() {
         for(int i = 0; i < menuItemList.size(); i++) {
             MenuItem mI = menuItemList.get(i);
             System.out.printf("%d. %-13s | W %5.1f | %s\n", i + 1, mI.getName(), (float)mI.getPrice() * 0.001, mI.getInfo());
         }
         System.out.printf("0. %-13s  | 종료\n", "종료");
 
-    }
-
-    /**
-     * 선택한 메뉴 아이템을 출력해주는 메서드
-     * @param selectNumber 유저가 고른 메뉴 아이템 넘버
-     */
-    public void printPickMenuItem(int selectNumber) {
-        MenuItem pickItem = menuItemList.get(selectNumber - 1);
-        System.out.println("선택한 메뉴 -> 이름: " + pickItem.getName() + " 가격: " + (float) pickItem.getPrice() * 0.001 + " 설명: " + pickItem.getInfo());
     }
 
     /**
