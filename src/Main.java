@@ -1,9 +1,11 @@
+import kiosk.Cart;
 import kiosk.Kiosk;
 import kiosk.Menu;
 import kiosk.MenuItem;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
@@ -15,9 +17,11 @@ public class Main {
         Menu sideMenu = new Menu("SIDE", makeSideList());
 
         List<Menu> menuList = new ArrayList<>(List.of(burgerMenu, drinkMenu, sideMenu));
+        Scanner scanner = new Scanner(System.in);
+        Cart cart = new Cart();
 
         //Kiosk 객체 생성
-        Kiosk kiosk = new Kiosk(menuList);
+        Kiosk kiosk = new Kiosk(menuList, cart, scanner);
 
         //Kiosk 내 시작하는 함수 호출
         kiosk.start();

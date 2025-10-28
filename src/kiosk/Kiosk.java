@@ -11,10 +11,10 @@ public class Kiosk {    //프로그램 순서 및 흐름 제어를 담당하는 
     private final Cart cart;            //장바구니 클래스
 
     //생성자
-    public Kiosk(List<Menu> category) {
-        this.sc = new Scanner(System.in);
+    public Kiosk(List<Menu> category, Cart cart, Scanner scanner) {
+        this.sc = scanner;
         this.category = category;
-        this.cart = new Cart();
+        this.cart = cart;
     }
 
     //기능
