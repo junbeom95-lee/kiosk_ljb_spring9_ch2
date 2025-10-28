@@ -18,6 +18,9 @@ public class Menu { //MenuItem 클래스를 관리하는 클래스
      * List에 들어있는 MenuItem을 순차적으로 보여주는 메서드
      */
     public void printMenuItemList() {
+
+        //TODO 스트림을 사용하여 출력하도록 수정
+
         for(int i = 0; i < menuItemList.size(); i++) {
             MenuItem mI = menuItemList.get(i);
             System.out.printf("%d. %-13s | W %5.1f | %s\n", i + 1, mI.getName(), (float)mI.getPrice() * 0.001, mI.getInfo());

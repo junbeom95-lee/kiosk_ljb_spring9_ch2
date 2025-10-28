@@ -110,6 +110,12 @@ public class Kiosk {    //프로그램 순서 및 흐름 제어를 담당하는 
 
                         //5-a. 1번 입력 시 주문이 완료되었습니다. 금액은 total 금액 출력 후 장바구니 비우기
                         if (1 == selectNumber) {
+
+                            //TODO 고객 타입에 따른 할인 적용
+                            //TODO selectNumber 로 값을 받아 할인 정보 받기 ex) 국가 유공자, 군인 등
+                            //TODO total  * CustomerType.~~~ ; <- 할인 적용
+
+
                             System.out.println("주문이 완료되었습니다. 금액은 W " + total + " 입니다.");
                             cart.clearCart();       //주문 후 장바구니 비우기 기능 추가
                             currentMenu = "MAIN";   //MAIN으로 돌아가기
