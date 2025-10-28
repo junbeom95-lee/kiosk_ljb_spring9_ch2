@@ -108,14 +108,20 @@ public class Kiosk {    //프로그램 순서 및 흐름 제어를 담당하는 
                         //4. 숫자 입력 받기 - 1. 주문 2. 메뉴판으로 돌아가기
                         selectNumber = getIntInput();
 
-                        //5-a. 1번 입력 시 주문이 완료되었습니다. 금액은 total 금액 출력 후 장바구니 비우기
+                        //5. 1번 입력 시 주문이 완료되었습니다. 금액은 total 금액 출력 후 장바구니 비우기
                         if (1 == selectNumber) {
 
-                            //TODO 고객 타입에 따른 할인 적용
-                            //TODO selectNumber 로 값을 받아 할인 정보 받기 ex) 국가 유공자, 군인 등
-                            //TODO total  * CustomerType.~~~ ; <- 할인 적용
+                            //6. 할인 정보 제공
+                            CustomerType.printCustomerType();
 
+                            //7. 할인 정보 입력 받기
+                            int customerTypeNum = getIntInput();
 
+                            //8. 할인 적용되는 가격 계산
+                            CustomerType customerType = CustomerType.fromCode(customerTypeNum);
+                            total = customerType.applyDiscount(total);
+
+                            //9. 총 금액 출력 및 주문 완료
                             System.out.println("주문이 완료되었습니다. 금액은 W " + total + " 입니다.");
                             cart.clearCart();       //주문 후 장바구니 비우기 기능 추가
                             currentMenu = "MAIN";   //MAIN으로 돌아가기
@@ -161,39 +167,41 @@ public class Kiosk {    //프로그램 순서 및 흐름 제어를 담당하는 
 
                         //5. 선택한 메뉴아이템 리스트 불러오기
                         List<MenuItem> menuItemList = menu.getMenuItemList();
-                        MenuItem pickItem = menuItemList.get(selectNumber - 1);
 
                         //5-a. 범위 밖의 번호일 때 throw 예외
                         if (menuItemList.size() < selectNumber || selectNumber < 0) {
                             throw new IndexOutOfBoundsException("번호를 잘 보시고 입력해주세요.");
                         }
 
-                        //5-b. 메뉴아이템을 고를 시 메뉴 출력
+                        //5-b. 고른 메뉴 아이템 객체화
+                        MenuItem pickItem = menuItemList.get(selectNumber - 1);
+
+                        //6. 메뉴아이템을 고를 시 메뉴 출력
                         if(0 != selectNumber) {
                             System.out.println("선택한 메뉴 -> 이름: " + pickItem.getName() + " 가격: " + (float) pickItem.getPrice() * 0.001 + " 설명: " + pickItem.getInfo());
                         } else {
-                            //5-c. 0을 누르면 메인으로 돌아가기
+                            //0을 누르면 메인으로 돌아가기
                             currentMenu = "MAIN";
                             break;
                         }
 
-                        //6. 장바구니에 담겨있는지 확인하여 수량을 반환
+                        //7. 장바구니에 담겨있는지 확인하여 수량을 반환
                         int addedEa = cart.checkMenuItemEa(pickItem);
 
-                        //6-a. 장바구니에 담겨있으면 달라지는 내용
+                        //7-a. 장바구니에 담겨있으면 달라지는 내용
                         if (0 == addedEa) {
                             System.out.print("수량을 정해주세요: ");
                         } else {
                             System.out.print("현재 담겨있는 개수는: " + addedEa + " 입니다. 새로운 수량을 정해주세요: ");
                         }
 
-                        //7. 장바구니에 메뉴아이템을 몇개 넣을지 수량 입력 받기
+                        //8. 장바구니에 메뉴아이템을 몇개 넣을지 수량 입력 받기
                         int ea = getIntInput();
 
-                        //8. 장바구니에 담기
+                        //9. 장바구니에 담기
                         cart.addMenuItem(pickItem, ea);
 
-                        //8. 메인으로 돌아가기
+                        //10. 메인으로 돌아가기
                         currentMenu = "MAIN";
                         break;
 
