@@ -114,7 +114,7 @@ public class Kiosk {    //프로그램 순서 및 흐름 제어를 담당하는 
         //2-a. 미출력일 때 4,5 번을 누르면 예외를 던저줘야 합니다.
         if (cart.checkCart()) {
             if (category.size() < menuNumber && category.size() + 2 < menuNumber) {
-                throw new IndexOutOfBoundsException("장바구니에 담겨있지 않습니다.");
+                throw new IndexOutOfBoundsException("잘못된 숫자를 선택하셨습니다.");
             }
         } else {
             //장바구니 확인 메뉴로 전환

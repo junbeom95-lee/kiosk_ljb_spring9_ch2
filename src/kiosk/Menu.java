@@ -6,7 +6,7 @@ import java.util.stream.IntStream;
 public class Menu { //MenuItem 클래스를 관리하는 클래스
     //속성
     private final String name;                    //메뉴 이름
-    private final List<MenuItem> menuItemList;    //사이드 메뉴 리스트 (MenuItem 클래스를 List로 관리)
+    private final List<MenuItem> menuItemList;    //메뉴 리스트 (MenuItem 클래스를 List로 관리)
 
     //생성자
     public Menu(String name, List<MenuItem> menuItemList) {
