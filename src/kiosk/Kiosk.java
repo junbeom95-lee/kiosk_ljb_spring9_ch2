@@ -58,8 +58,6 @@ public class Kiosk {    //프로그램 순서 및 흐름 제어를 담당하는 
                 System.out.println("존재하지 않은 메뉴입니다.");
             }
 
-            System.out.println("menuNumber = " + menuNumber);
-            System.out.println("menuType = " + menuType);
         } while (running);
 
         //프로그램 종료
