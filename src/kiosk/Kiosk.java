@@ -26,7 +26,8 @@ public class Kiosk {    //프로그램 순서 및 흐름 제어를 담당하는 
      */
     public void start() {
 
-        int menuNumber = 0;                 //카테고리 선택 숫자 0이면 종료
+        int menuNumber = 0;     //카테고리 선택 숫자 0이면 종료
+        boolean running = true; //키오스크 동작 상태 true 면 동작 false면 종료
 
         //반복문 시작
         do {
@@ -36,9 +37,10 @@ public class Kiosk {    //프로그램 순서 및 흐름 제어를 담당하는 
                     case MAIN:    //메인 메뉴
                         printMain();                    //메인 메뉴 출력
                         menuNumber = handleMain();      //메인 메뉴 선택
+                        if(0 == menuNumber) running = false;
                         break;
                     case MENU:    //메뉴를 골랐을 때
-                        Menu menu = printMenu(menuNumber);                    //메뉴 출력 (메뉴 아이템 리스트 출력)
+                        Menu menu = printMenu(menuNumber);  //메뉴 출력 (메뉴 아이템 리스트 출력)
                         handleMenu(menu);                   //메뉴 선택 (메뉴 아이템 선택)
                         break;
                     case ORDER:   //장바구니를 확인 후 주문할 때
@@ -51,12 +53,14 @@ public class Kiosk {    //프로그램 순서 및 흐름 제어를 담당하는 
                         break;
                 }
             } catch (IndexOutOfBoundsException e) {
-                //예외 메시지 출력
                 System.out.println(e.getMessage());
             } catch (NullPointerException e) {
                 System.out.println("존재하지 않은 메뉴입니다.");
             }
-        } while (0 != menuNumber);
+
+            System.out.println("menuNumber = " + menuNumber);
+            System.out.println("menuType = " + menuType);
+        } while (running);
 
         //프로그램 종료
         sc.close(); //Scanner 종료
@@ -112,6 +116,7 @@ public class Kiosk {    //프로그램 순서 및 흐름 제어를 담당하는 
 
         //2. 해당 메뉴 전환
         //2-a. 미출력일 때 4,5 번을 누르면 예외를 던저줘야 합니다.
+        if(0 == menuNumber) return menuNumber;
         if (cart.checkCart()) {
             if (category.size() < menuNumber && category.size() + 2 < menuNumber) {
                 throw new IndexOutOfBoundsException("잘못된 숫자를 선택하셨습니다.");
@@ -130,9 +135,7 @@ public class Kiosk {    //프로그램 순서 및 흐름 제어를 담당하는 
         }
 
         //2-b. 종료할 때 (0을 입력시)
-        if (0 == menuNumber) {
-            return menuNumber;
-        } else if (category.size() >= menuNumber) { //카테고리 선택 시
+        if (category.size() >= menuNumber) { //카테고리 선택 시
             //2-c. 메뉴로 전환
             menuType = MenuType.MENU;
             return menuNumber;

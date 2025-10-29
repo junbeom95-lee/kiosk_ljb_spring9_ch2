@@ -5,7 +5,7 @@ import java.util.Map;
 
 public class Cart { //MenuItem을 장바구니에 담는 기능을 가진 클래스
     //속성
-    private final Map<MenuItem, Integer> cart;  //장바구니
+    private final Map<MenuItem, Integer> cart;  //장바구니 (MenuItem, 수량)
 
     //생성자
     public Cart() {
