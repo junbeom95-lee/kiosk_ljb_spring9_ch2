@@ -1,6 +1,7 @@
 package kiosk;
 
 import java.util.List;
+import java.util.stream.IntStream;
 
 public class Menu { //MenuItem 클래스를 관리하는 클래스
     //속성
@@ -19,14 +20,14 @@ public class Menu { //MenuItem 클래스를 관리하는 클래스
      */
     public void printMenuItemList() {
 
-        //TODO 스트림을 사용하여 출력하도록 수정
-
-        for(int i = 0; i < menuItemList.size(); i++) {
-            MenuItem mI = menuItemList.get(i);
-            System.out.printf("%d. %-13s | W %5.1f | %s\n", i + 1, mI.getName(), (float)mI.getPrice() * 0.001, mI.getInfo());
-        }
+        //스트림을 활용한 간결한 코드로 동작 구현
+        IntStream.range(0, menuItemList.size())
+                        .forEach(i -> {
+                            MenuItem menuItem = menuItemList.get(i);
+                            System.out.printf("%d. %-13s | W %5.1f | %s\n",
+                                    i + 1, menuItem.getName(), (float)menuItem.getPrice() * 0.001, menuItem.getInfo());
+                        });
         System.out.printf("0. %-13s  | 종료\n", "종료");
-
     }
 
     /**
