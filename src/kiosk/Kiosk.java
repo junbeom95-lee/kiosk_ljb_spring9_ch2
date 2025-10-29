@@ -6,9 +6,10 @@ import java.util.Scanner;
 
 public class Kiosk {    //프로그램 순서 및 흐름 제어를 담당하는 클래스
     //속성
-    private final Scanner sc;           //Scanner 선언
-    private final List<Menu> category;  //여러 메뉴를 담은 리스트
-    private final Cart cart;            //장바구니 클래스
+    private final Scanner sc;                   //Scanner
+    private final List<Menu> category;          //여러 메뉴를 담은 리스트
+    private final Cart cart;                    //장바구니 클래스
+    private MenuType menuType = MenuType.MAIN;  //메뉴 상태 (현재 메뉴의 상태)
 
     //생성자
     public Kiosk(List<Menu> category, Cart cart, Scanner scanner) {
