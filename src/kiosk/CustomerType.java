@@ -1,5 +1,7 @@
 package kiosk;
 
+import java.util.Arrays;
+
 public enum CustomerType {    //사용자 유형의 Enum 정의 및 각 사용자 유형에 따른 할인율 적용
 
     PATRIOT(1, "국가유공자", 0.1),  //국가유공자
@@ -25,9 +27,9 @@ public enum CustomerType {    //사용자 유형의 Enum 정의 및 각 사용�
      */
     public static void printCustomerType() {
         System.out.println("할인 정보를 입력해주세요.");
-        for (CustomerType customerType : values()) {
-            System.out.printf("%d. %-15s : %d%%\n", customerType.code, customerType.name, (int) (customerType.discount * 100));
-        }
+        Arrays.stream(values())
+                .forEach(customerType ->
+                        System.out.printf("%d. %-15s : %d%%\n", customerType.code, customerType.name, (int) (customerType.discount * 100)));
     }
 
     /**
@@ -36,10 +38,14 @@ public enum CustomerType {    //사용자 유형의 Enum 정의 및 각 사용�
      * @return 입력받은 num과 매칭된 CustomerType 상수
      */
     public static CustomerType fromCode(int num) {
-        for (CustomerType customerType : values()) {
-            if(customerType.code == num) return customerType;
-        }
-        throw new IndexOutOfBoundsException("찾으시는 할인 정보가 없습니다.");
+        return Arrays.stream(values())
+                .filter(customerType -> customerType.code == num)
+                .findFirst()
+                .orElseThrow(() -> new IndexOutOfBoundsException("num: " + num + " 는 없습니다. 다시 입력해주세요."));
+//        for (CustomerType customerType : values()) {
+//            if(customerType.code == num) return customerType;
+//        }
+//        throw new IndexOutOfBoundsException();
     }
 
     /**
