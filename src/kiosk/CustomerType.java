@@ -42,10 +42,6 @@ public enum CustomerType {    //사용자 유형의 Enum 정의 및 각 사용�
                 .filter(customerType -> customerType.code == num)
                 .findFirst()
                 .orElseThrow(() -> new IndexOutOfBoundsException("num: " + num + " 는 없습니다. 다시 입력해주세요."));
-//        for (CustomerType customerType : values()) {
-//            if(customerType.code == num) return customerType;
-//        }
-//        throw new IndexOutOfBoundsException();
     }
 
     /**
@@ -54,6 +50,6 @@ public enum CustomerType {    //사용자 유형의 Enum 정의 및 각 사용�
      * @return 총 가격에서 할인을 한 가격
      */
     public int applyDiscount(int price) {
-        return (int) (price * (1 - discount));
+        return ((int)(price * (1 - discount)) / 10 * 10);
     }
 }
