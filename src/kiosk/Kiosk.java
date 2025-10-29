@@ -131,9 +131,8 @@ public class Kiosk {    //프로그램 순서 및 흐름 제어를 담당하는 
 
         //2-b. 종료할 때 (0을 입력시)
         if (0 == menuNumber) {
-            System.out.println("종료하겠습니다.");
             return menuNumber;
-        } else if (category.size() >= menuNumber) { //3-c. 카테고리 선택 시
+        } else if (category.size() >= menuNumber) { //카테고리 선택 시
             //2-c. 메뉴로 전환
             menuType = MenuType.MENU;
             return menuNumber;
@@ -144,6 +143,8 @@ public class Kiosk {    //프로그램 순서 및 흐름 제어를 담당하는 
 
     /**
      * 메뉴 화면 출력 - 1. 메뉴아이템 리스트 출력
+     * @param menuNumber 선택한 카테고리 번호
+     * @return 선택한 메뉴
      */
     private Menu printMenu(int menuNumber) {
 
